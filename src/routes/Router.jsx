@@ -5,7 +5,7 @@ import Estadisticas from "../pages/Estadisticas";
 
 export default function Router() {
     return (
-        <BrowserRouter basename="/Frontend-GameTracker/">
+        <BrowserRouter basename="/Frontend-GameTracker">
             <Routes>
                 <Route path="/biblioteca" element={<Biblioteca />} />
                 <Route path="/resenas" element={<Resenas />} />
