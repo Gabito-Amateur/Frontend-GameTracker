@@ -1,0 +1,48 @@
+.form-juego {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-juego label {
+    display: flex;
+    flex-direction: column;
+    color: #ccc;
+    font-size: 0.95rem;
+}
+
+.form-juego input,
+.form-juego textarea {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 6px;
+    color: #fff;
+    margin-top: 4px;
+}
+
+.form-juego input:focus,
+.form-juego textarea:focus {
+    border-color: #1e90ff;
+    outline: none;
+}
+
+.checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-guardar {
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-guardar:hover {
+    background-color: #3aa0ff;
+}

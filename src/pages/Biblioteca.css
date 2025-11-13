@@ -1,0 +1,62 @@
+.biblioteca-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-agregar {
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-weight: bold;
+}
+
+.btn-agregar:hover {
+    background-color: #3aa0ff;
+}
+
+.alerta {
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+.alerta:has(> span) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alerta::before {
+    content: "ℹ️ ";
+}
+
+.alerta {
+    background-color: #222;
+    color: #eee;
+    border-left: 4px solid #1e90ff;
+}
+
+/* Colores según mensaje */
+.alerta:has(span.warning),
+.alerta:contains("⚠️") {
+    border-left-color: #ffb400;
+}
+
+.alerta:has(span.success),
+.alerta:contains("✅") {
+    border-left-color: #00c851;
+}
+
+.alerta:has(span.error),
+.alerta:contains("❌") {
+    border-left-color: #ff4444;
+}
