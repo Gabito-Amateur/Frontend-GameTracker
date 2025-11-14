@@ -56,3 +56,8 @@ export const eliminarResena = async (id) => {
     throw error;
   }
 };
+
+export const obtenerResenas = async () => {
+  const res = await axios.get(RESENAS_URL);
+  return res.data;
+};
