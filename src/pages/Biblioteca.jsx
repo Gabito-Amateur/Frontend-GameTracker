@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import JuegoCard from "../components/JuegoCard/JuegoCard";
 import FormularioJuego from "../components/FormularioJuego/FormularioJuego";
-import { obtenerJuegos, agregarJuego } from "../api/JuegosApi";
+import { obtenerJuegos, agregarJuego, eliminarJuego, actualizarJuego } from "../api/JuegosApi";
 import { obtenerResenaPorJuego } from "../api/ResenasApi";
 import "./Biblioteca.css";
 
@@ -9,6 +9,7 @@ export default function Biblioteca() {
     const [juegos, setJuegos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [juegoEnEdicion, setJuegoEnEdicion] = useState(null);
     const [error, setError] = useState(null);
     const [mensaje, setMensaje] = useState(null); // para mostrar alertas
 
@@ -84,6 +85,39 @@ export default function Biblioteca() {
         ));
     };
 
+    const handleEliminarJuego = async (id) => {
+        try {
+            await eliminarJuego(id);
+            setJuegos(juegos.filter((j) => j._id !== id));
+            setMensaje("✅ Juego eliminado correctamente.");
+            setTimeout(() => setMensaje(null), 3000);
+        } catch (err) {
+            console.error("Error al eliminar el juego:", err);
+            setMensaje("❌ Ocurrió un error al eliminar el juego.");
+            setTimeout(() => setMensaje(null), 3000);
+        }
+    };
+
+    const handleEditarJuego = (juego) => {
+        setJuegoEnEdicion(juego);
+        setMostrarModal(true);
+    };
+
+    const handleActualizarFormulario = async (juegoActualizado) => {
+        try {
+            const resultado = await actualizarJuego(juegoEnEdicion._id, juegoActualizado);
+            setJuegos(juegos.map((j) => (j._id === resultado._id ? resultado : j)));
+            setJuegoEnEdicion(null);
+            setMostrarModal(false);
+            setMensaje("✅ Juego actualizado correctamente.");
+            setTimeout(() => setMensaje(null), 3000);
+        } catch (err) {
+            console.error("Error al actualizar el juego:", err);
+            setMensaje("❌ Ocurrió un error al actualizar el juego.");
+            setTimeout(() => setMensaje(null), 3000);
+        }
+    };
+
     if (cargando) return <p>Cargando juegos...</p>;
     if (error) return <p>{error}</p>;
 
@@ -103,14 +137,26 @@ export default function Biblioteca() {
                 {juegos.length === 0 ? (
                     <p>No hay juegos en tu biblioteca.</p>
                 ) : (
-                    juegos.map((juego) => <JuegoCard key={juego._id} juego={juego} onActualizar={handleActualizarJuego} />)
+                    juegos.map((juego) => (
+                        <JuegoCard
+                            key={juego._id}
+                            juego={juego}
+                            onActualizar={handleActualizarJuego}
+                            onEditar={handleEditarJuego}
+                            onEliminar={handleEliminarJuego}
+                        />
+                    ))
                 )}
             </div>
 
             {mostrarModal && (
                 <FormularioJuego
-                    onClose={() => setMostrarModal(false)}
-                    onSubmit={handleAgregarJuego}
+                    onClose={() => {
+                        setMostrarModal(false);
+                        setJuegoEnEdicion(null);
+                    }}
+                    onSubmit={juegoEnEdicion ? handleActualizarFormulario : handleAgregarJuego}
+                    juegoInicial={juegoEnEdicion}
                 />
             )}
         </section>

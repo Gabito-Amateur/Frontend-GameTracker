@@ -2,6 +2,44 @@
   padding: 20px;
 }
 
+.resenas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.resenas-header h2 {
+  margin: 0;
+}
+
+.btn-agregar-resena {
+  background-color: #1e90ff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-agregar-resena:hover {
+  background-color: #3aa0ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 144, 255, 0.4);
+}
+
+/* --- Formulario de reseña --- */
+.formulario-resena {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  margin-bottom: 25px;
+}
+
+/* --- Lista de reseñas --- */
 .resenas-list {
   display: flex;
   flex-direction: column;
@@ -16,49 +54,89 @@
 }
 
 .resena-card h3 {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  color: #fff;
 }
 
-.resena-card .texto {
+.resena-detalles {
+  margin-bottom: 12px;
+}
+
+.resena-detalles p {
+  margin: 8px 0;
+  color: #ddd;
+  font-size: 0.95rem;
+}
+
+.resena-detalles .puntuacion,
+.resena-detalles .horas,
+.resena-detalles .dificultad,
+.resena-detalles .recomendacion {
+  color: #aaa;
+}
+
+.resena-detalles .texto {
   background-color: #292929;
   padding: 10px;
   border-radius: 6px;
   font-style: italic;
   color: #ddd;
+  margin-top: 12px;
 }
 
-.resena-card textarea {
-  width: 100%;
-  min-height: 70px;
-  background: #292929;
-  border: 1px solid #444;
+.resena-edicion {
+  background-color: #252525;
+  padding: 12px;
   border-radius: 6px;
-  color: white;
-  padding: 8px;
+  margin-bottom: 12px;
+}
+
+.resena-edicion .form-group {
   margin-bottom: 10px;
 }
 
 .fecha {
   font-size: 0.85rem;
-  color: #aaa;
+  color: #888;
+  margin: 8px 0;
 }
 
 .acciones {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
-.acciones button {
+.btn-editar {
   background: #1e90ff;
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
   color: white;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
-.acciones button:hover {
+.btn-editar:hover {
   background: #3aa0ff;
+  transform: translateY(-2px);
 }
 
+.btn-eliminar {
+  background: #dc3545;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.btn-eliminar:hover {
+  background: #e74c3c;
+  transform: translateY(-2px);
+}

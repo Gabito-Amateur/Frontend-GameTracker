@@ -3,15 +3,15 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 const RESENAS_URL = `${API_URL}/api/resenas`; // 👈 ojo: sin tilde
 
-export const crearResena = async (juegoId, textoResena) => {
+export const crearResena = async (juegoId, datos) => {
   try {
     const body = {
       juegoId,
-      puntuacion: 5,            // ✅ valor por defecto
-      textoResena,              // ✅ coincide con el modelo
-      horasJugadas: 0,
-      dificultad: "Normal",
-      recomendaria: true
+      puntuacion: datos.puntuacion || 5,
+      textoResena: datos.textoResena,
+      horasJugadas: datos.horasJugadas || 0,
+      dificultad: datos.dificultad || "Normal",
+      recomendaria: datos.recomendaria !== undefined ? datos.recomendaria : true
     };
 
     const response = await axios.post(RESENAS_URL, body);
@@ -37,9 +37,17 @@ export const obtenerResenaPorJuego = async (juegoId) => {
   }
 };
 
-export const actualizarResena = async (id, textoResena) => {
+export const actualizarResena = async (id, datos) => {
   try {
-    const response = await axios.put(`${RESENAS_URL}/${id}`, { textoResena });
+    const body = {
+      puntuacion: datos.puntuacion,
+      textoResena: datos.textoResena,
+      horasJugadas: datos.horasJugadas,
+      dificultad: datos.dificultad,
+      recomendaria: datos.recomendaria
+    };
+
+    const response = await axios.put(`${RESENAS_URL}/${id}`, body);
     return response.data;
   } catch (error) {
     console.error("Error al actualizar reseña:", error);
