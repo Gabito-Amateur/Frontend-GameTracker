@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// Base URL del backend (usa .env)
+// Base URL del backend 
 const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 const JUEGOS_URL = `${API_URL}/api/juegos`;

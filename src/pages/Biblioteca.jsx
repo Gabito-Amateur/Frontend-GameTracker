@@ -50,7 +50,7 @@ export default function Biblioteca() {
     }, []);
 
     const handleAgregarJuego = async (nuevoJuego) => {
-        // 🔍 Validar duplicado por título (sin importar mayúsculas/minúsculas)
+        // Validar duplicado por título (sin importar mayúsculas/minúsculas)
         const tituloExiste = juegos.some(
             (j) => j.titulo.trim().toLowerCase() === nuevoJuego.titulo.trim().toLowerCase()
         );

@@ -78,7 +78,14 @@ export default function Resenas() {
   };
 
   const obtenerTituloJuego = (juegoId) => {
-    const juego = juegos.find(j => j._id === juegoId);
+    // juegoId puede ser un string o un objeto (si viene poblado del backend)
+    const juegoIdString = typeof juegoId === 'object' ? juegoId?._id : juegoId;
+
+    if (typeof juegoId === 'object' && juegoId?.titulo) {
+      return juegoId.titulo;
+    }
+
+    const juego = juegos.find(j => j._id === juegoIdString);
     return juego ? juego.titulo : "Juego desconocido";
   };
 

@@ -6,11 +6,9 @@ const IMAGEN_DEFECTO = "https://via.placeholder.com/220x130?text=Sin+portada";
 
 export default function JuegoCard({ juego, onEditar, onEliminar }) {
     const [mostrarModal, setMostrarModal] = useState(false);
-    const [resena, setResena] = useState(null);
-    const [resenaId, setResenaId] = useState(null);
-    const [editando, setEditando] = useState(false);
-    const [textoTemporal, setTextoTemporal] = useState("");
-    const [cargandoResena, setCargandoResena] = useState(false);
+    const [setEditando] = useState(false);
+    const [setTextoTemporal] = useState("");
+    const [setCargandoResena] = useState(false);
     const [imagenError, setImagenError] = useState(false);
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 

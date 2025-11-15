@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
-const RESENAS_URL = `${API_URL}/api/resenas`; // 👈 ojo: sin tilde
+const RESENAS_URL = `${API_URL}/api/resenas`;
 
 export const crearResena = async (juegoId, datos) => {
   try {

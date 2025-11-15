@@ -10,7 +10,7 @@ export default function FormularioResena({
 }) {
     const [formulario, setFormulario] = useState({
         juegoId: "",
-        puntuacion: 5,
+        puntuacion: 0,
         textoResena: "",
         horasJugadas: 0,
         dificultad: "Normal",
@@ -21,8 +21,12 @@ export default function FormularioResena({
 
     useEffect(() => {
         if (resenaInicial && esEdicion) {
+            const juegoIdString = typeof resenaInicial.juegoId === 'object'
+                ? resenaInicial.juegoId._id
+                : resenaInicial.juegoId;
+
             setFormulario({
-                juegoId: resenaInicial.juegoId,
+                juegoId: juegoIdString,
                 puntuacion: resenaInicial.puntuacion,
                 textoResena: resenaInicial.textoResena,
                 horasJugadas: resenaInicial.horasJugadas,
@@ -36,7 +40,7 @@ export default function FormularioResena({
         const { name, value, type, checked } = e.target;
         setFormulario({
             ...formulario,
-            [name]: type === "checkbox" ? checked : name === "horasJugadas" ? parseInt(value) : value,
+            [name]: type === "checkbox" ? checked : name === "horasJugadas" ? parseInt(value) || 0 : value,
         });
     };
 
@@ -71,7 +75,16 @@ export default function FormularioResena({
             return;
         }
 
-        onSubmit(formulario);
+        // Asegurarse de que los datos estén en el formato correcto
+        const datosLimpios = {
+            ...formulario,
+            puntuacion: Number(formulario.puntuacion),
+            horasJugadas: Number(formulario.horasJugadas) || 0,
+            recomendaria: Boolean(formulario.recomendaria)
+        };
+
+        console.log("Datos a enviar:", datosLimpios);
+        onSubmit(datosLimpios);
     };
 
     return (
