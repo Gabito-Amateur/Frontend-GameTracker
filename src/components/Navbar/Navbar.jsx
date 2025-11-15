@@ -19,7 +19,7 @@ export default function Navbar() {
             <div className="navbar-logo">
                 <Link to="/" onClick={cerrarMenu}>
                     <img
-                        src="../../../public/logo.png"
+                        src="/logo.png"
                         alt="GameTracker Logo"
                         className="navbar-logo-img"
                         onError={(e) => {
