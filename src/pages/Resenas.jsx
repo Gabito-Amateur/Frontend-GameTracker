@@ -10,6 +10,7 @@ export default function Resenas() {
   const [editandoId, setEditandoId] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [cargando, setCargando] = useState(true);
+  const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
     cargarDatos();
@@ -25,6 +26,8 @@ export default function Resenas() {
       setJuegos(datosJuegos);
     } catch (err) {
       console.error("Error al cargar datos:", err);
+      setMensaje({ tipo: "error", texto: "❌ Error al cargar los datos." });
+      setTimeout(() => setMensaje(null), 3000);
     } finally {
       setCargando(false);
     }
@@ -45,22 +48,38 @@ export default function Resenas() {
       });
       setResenas(resenas.map(r => (r._id === editandoId ? actualizada : r)));
       setEditandoId(null);
-      alert("Reseña actualizada correctamente.");
+      setMensaje({ tipo: "success", texto: "✅ Reseña actualizada correctamente." });
+      setTimeout(() => setMensaje(null), 3000);
     } catch (err) {
       console.error("Error al actualizar reseña:", err);
-      alert("Error: " + (err.response?.data?.mensaje || err.message || "No se pudo actualizar la reseña"));
+      setMensaje({ tipo: "error", texto: "❌ Error al actualizar la reseña." });
+      setTimeout(() => setMensaje(null), 3000);
     }
   };
 
   const crearNuevaResena = async (formulario) => {
     try {
+      // Validar si ya existe una reseña para ese juego
+      const resenaExistente = resenas.find(r => {
+        const juegoId = typeof r.juegoId === 'object' ? r.juegoId._id : r.juegoId;
+        return juegoId === formulario.juegoId;
+      });
+
+      if (resenaExistente) {
+        setMensaje({ tipo: "warning", texto: "⚠️ Ya existe una reseña para este juego." });
+        setTimeout(() => setMensaje(null), 3000);
+        return;
+      }
+
       const nuevaResena = await crearResena(formulario.juegoId, formulario);
       setResenas([...resenas, nuevaResena]);
       setMostrarFormulario(false);
-      alert("Reseña creada correctamente.");
+      setMensaje({ tipo: "success", texto: "✅ Reseña creada correctamente." });
+      setTimeout(() => setMensaje(null), 3000);
     } catch (err) {
       console.error("Error al crear reseña:", err);
-      alert("Error: " + (err.response?.data?.mensaje || err.message || "No se pudo crear la reseña"));
+      setMensaje({ tipo: "error", texto: "❌ Error al crear la reseña." });
+      setTimeout(() => setMensaje(null), 3000);
     }
   };
 
@@ -69,16 +88,17 @@ export default function Resenas() {
       try {
         await eliminarResena(id);
         setResenas(resenas.filter(r => r._id !== id));
-        alert("Reseña eliminada correctamente.");
+        setMensaje({ tipo: "success", texto: "✅ Reseña eliminada correctamente." });
+        setTimeout(() => setMensaje(null), 3000);
       } catch (err) {
         console.error("Error al eliminar reseña:", err);
-        alert("Error al eliminar la reseña.");
+        setMensaje({ tipo: "error", texto: "❌ Error al eliminar la reseña." });
+        setTimeout(() => setMensaje(null), 3000);
       }
     }
   };
 
   const obtenerTituloJuego = (juegoId) => {
-    // juegoId puede ser un string o un objeto (si viene poblado del backend)
     const juegoIdString = typeof juegoId === 'object' ? juegoId?._id : juegoId;
 
     if (typeof juegoId === 'object' && juegoId?.titulo) {
@@ -89,16 +109,42 @@ export default function Resenas() {
     return juego ? juego.titulo : "Juego desconocido";
   };
 
+  if (cargando) {
+    return (
+      <section className="resenas-page">
+        <div className="resenas-header">
+          <h2>
+            <span>📝</span>
+            Reseñas
+          </h2>
+        </div>
+        <p style={{ textAlign: 'center', color: '#888', fontSize: '1.1rem' }}>
+          Cargando reseñas...
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section className="resenas-page">
       <div className="resenas-header">
-        <h2>📝 Reseñas</h2>
+        <h2>
+          <span>📝</span>
+          Reseñas
+        </h2>
         {juegos.length > 0 && (
           <button className="btn-agregar-resena" onClick={() => setMostrarFormulario(true)}>
             ➕ Agregar reseña
           </button>
         )}
       </div>
+
+      {/* Mensaje temporal */}
+      {mensaje && (
+        <div className={`alerta ${mensaje.tipo}`}>
+          {mensaje.texto}
+        </div>
+      )}
 
       {/* Formulario para crear reseña */}
       {mostrarFormulario && (
@@ -110,9 +156,7 @@ export default function Resenas() {
         />
       )}
 
-      {cargando ? (
-        <p>Cargando reseñas...</p>
-      ) : resenas.length === 0 ? (
+      {resenas.length === 0 ? (
         <p>No hay reseñas registradas.</p>
       ) : (
         <div className="resenas-list">
@@ -164,5 +208,3 @@ export default function Resenas() {
     </section>
   );
 }
-
-

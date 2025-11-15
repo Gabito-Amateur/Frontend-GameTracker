@@ -60,14 +60,16 @@ export default function Estadisticas() {
 
             // Juego con menos horas
             let juegoMenosHoras = null;
-            let minHoras = Infinity;
-            Object.entries(horasPorJuego).forEach(([juegoId, horas]) => {
-                if (horas < minHoras) {
-                    minHoras = horas;
-                    const juego = juegos.find(j => j._id === juegoId);
-                    juegoMenosHoras = { juego, horas };
-                }
-            });
+            if (Object.keys(horasPorJuego).length > 1) {
+                let minHoras = Infinity;
+                Object.entries(horasPorJuego).forEach(([juegoId, horas]) => {
+                    if (horas < minHoras) {
+                        minHoras = horas;
+                        const juego = juegos.find(j => j._id === juegoId);
+                        juegoMenosHoras = { juego, horas };
+                    }
+                });
+            }
 
             setEstadisticas({
                 totalJuegos,
@@ -85,12 +87,22 @@ export default function Estadisticas() {
     };
 
     if (cargando) {
-        return <section className="estadisticas-page"><p>Cargando estadísticas...</p></section>;
+        return (
+            <section className="estadisticas-page">
+                <h2>📊 Estadísticas Personales</h2>
+                <p>Cargando estadísticas...</p>
+            </section>
+        );
     }
+
+    const hayDatos = estadisticas.juegoMasHoras || estadisticas.juegoMenosHoras;
 
     return (
         <section className="estadisticas-page">
-            <h2>📊 Estadísticas Personales</h2>
+            <h2>
+                <span>📊</span>
+                Estadísticas Personales
+            </h2>
 
             <div className="estadisticas-grid">
                 {/* Total de juegos registrados */}
@@ -104,7 +116,7 @@ export default function Estadisticas() {
 
                 {/* Total de juegos completados */}
                 <div className="stat-card">
-                    <div className="stat-icon">▶️</div>
+                    <div className="stat-icon">✅</div>
                     <div className="stat-content">
                         <h3>Juegos Completados</h3>
                         <p className="stat-value">{estadisticas.totalCompletados}</p>
@@ -131,33 +143,33 @@ export default function Estadisticas() {
                 </div>
             </div>
 
-            {/* Juego con más horas */}
-            {estadisticas.juegoMasHoras && (
-                <div className="juego-destacado mas-horas">
-                    <div className="juego-icon">👑</div>
-                    <div className="juego-info">
-                        <h3>Juego con Más Horas</h3>
-                        <p className="juego-titulo">{estadisticas.juegoMasHoras.juego.titulo}</p>
-                        <p className="juego-horas">{estadisticas.juegoMasHoras.horas.toFixed(1)}h</p>
-                    </div>
-                </div>
-            )}
+            {/* Juegos destacados */}
+            {hayDatos ? (
+                <div className="juegos-destacados">
+                    {/* Juego con más horas */}
+                    {estadisticas.juegoMasHoras && (
+                        <div className="juego-destacado mas-horas">
+                            <span className="juego-icon">👑</span>
+                            <p className="juego-categoria">Juego con más horas</p>
+                            <h3 className="juego-titulo">{estadisticas.juegoMasHoras.juego.titulo}</h3>
+                            <p className="juego-horas">{estadisticas.juegoMasHoras.horas.toFixed(1)}h</p>
+                        </div>
+                    )}
 
-            {/* Juego con menos horas */}
-            {estadisticas.juegoMenosHoras && (
-                <div className="juego-destacado menos-horas">
-                    <div className="juego-icon">🎯</div>
-                    <div className="juego-info">
-                        <h3>Juego con Menos Horas</h3>
-                        <p className="juego-titulo">{estadisticas.juegoMenosHoras.juego.titulo}</p>
-                        <p className="juego-horas">{estadisticas.juegoMenosHoras.horas.toFixed(1)}h</p>
-                    </div>
+                    {/* Juego con menos horas */}
+                    {estadisticas.juegoMenosHoras && (
+                        <div className="juego-destacado menos-horas">
+                            <span className="juego-icon">🎯</span>
+                            <p className="juego-categoria">Juego con menos horas</p>
+                            <h3 className="juego-titulo">{estadisticas.juegoMenosHoras.juego.titulo}</h3>
+                            <p className="juego-horas">{estadisticas.juegoMenosHoras.horas.toFixed(1)}h</p>
+                        </div>
+                    )}
                 </div>
-            )}
-
-            {estadisticas.totalJugados === 0 && (
+            ) : (
                 <div className="sin-datos">
-                    <p>No hay datos suficientes para mostrar estadísticas. Crea reseñas de tus juegos.</p>
+                    <p>No hay suficientes datos para mostrar juegos destacados.</p>
+                    <p>Crea reseñas con horas jugadas para ver estadísticas más detalladas.</p>
                 </div>
             )}
         </section>

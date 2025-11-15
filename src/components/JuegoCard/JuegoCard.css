@@ -1,4 +1,4 @@
-/* --- Tarjeta de juego --- */
+/* Tarjeta de juego */
 .juego-card {
     width: 260px;
     height: 140px;
@@ -85,7 +85,7 @@
     animation: pulse 2s ease-in-out infinite;
 }
 
-/* --- Modal --- */
+/* Modal */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -250,7 +250,7 @@
     transform: translateY(-1px);
 }
 
-/* --- Modal de confirmación --- */
+/* Modal de confirmación */
 .modal-confirmacion-overlay {
     position: fixed;
     top: 0;
@@ -376,7 +376,7 @@
     }
 }
 
-/* --- Responsivo --- */
+/* Responsive */
 @media (max-width: 1024px) {
     .modal-body {
         grid-template-columns: 350px 1fr;

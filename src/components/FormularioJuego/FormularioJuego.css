@@ -181,7 +181,7 @@
     font-weight: 500;
 }
 
-/* Botón guardar - específico del FormularioJuego */
+/* Botón guardar */
 .form-juego .btn-guardar {
     background: linear-gradient(135deg, #e8e8e8 0%, #cccccc 100%);
     color: #000000;
@@ -212,7 +212,7 @@
     transform: translateY(0);
 }
 
-/* Grupos de campos (para inputs relacionados) */
+/* Grupos de campos */
 .form-juego .form-group-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -281,7 +281,7 @@
     color: #b0b0b0;
 }
 
-/* Responsivo */
+/* Responsive */
 @media (max-width: 768px) {
     .modal-content-form {
         padding: 18px 15px;

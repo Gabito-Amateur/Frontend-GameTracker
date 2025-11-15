@@ -175,7 +175,7 @@
     margin: 0;
 }
 
-/* 📱 Responsivo */
+/* Responsive */
 @media (max-width: 900px) {
     .footer-container {
         grid-template-columns: repeat(2, 1fr);
