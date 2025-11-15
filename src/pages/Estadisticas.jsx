@@ -6,7 +6,7 @@ import "./Estadisticas.css";
 export default function Estadisticas() {
     const [estadisticas, setEstadisticas] = useState({
         totalJuegos: 0,
-        totalJugados: 0,
+        totalCompletados: 0,
         totalHoras: 0,
         promedioHoras: 0,
         juegoMasHoras: null,
@@ -28,6 +28,9 @@ export default function Estadisticas() {
             // Total de juegos registrados
             const totalJuegos = juegos.length;
 
+            // Total de juegos completados
+            const totalCompletados = juegos.filter(juego => juego.completado).length;
+
             // Calcular horas por juego
             const horasPorJuego = {};
             resenas.forEach(resena => {
@@ -38,14 +41,11 @@ export default function Estadisticas() {
                 horasPorJuego[juegoId] += resena.horasJugadas;
             });
 
-            // Total de juegos jugados (juegos con reseñas)
-            const totalJugados = Object.keys(horasPorJuego).length;
-
             // Total de horas jugadas
             const totalHoras = Object.values(horasPorJuego).reduce((sum, horas) => sum + horas, 0);
 
             // Promedio de horas por juego
-            const promedioHoras = totalJugados > 0 ? (totalHoras / totalJugados).toFixed(2) : 0;
+            const promedioHoras = totalCompletados > 0 ? (totalHoras / totalCompletados).toFixed(2) : 0;
 
             // Juego con más horas
             let juegoMasHoras = null;
@@ -71,7 +71,7 @@ export default function Estadisticas() {
 
             setEstadisticas({
                 totalJuegos,
-                totalJugados,
+                totalCompletados,
                 totalHoras,
                 promedioHoras,
                 juegoMasHoras,
@@ -102,12 +102,12 @@ export default function Estadisticas() {
                     </div>
                 </div>
 
-                {/* Total de juegos jugados */}
+                {/* Total de juegos completados */}
                 <div className="stat-card">
                     <div className="stat-icon">▶️</div>
                     <div className="stat-content">
-                        <h3>Juegos Jugados</h3>
-                        <p className="stat-value">{estadisticas.totalJugados}</p>
+                        <h3>Juegos Completados</h3>
+                        <p className="stat-value">{estadisticas.totalCompletados}</p>
                     </div>
                 </div>
 

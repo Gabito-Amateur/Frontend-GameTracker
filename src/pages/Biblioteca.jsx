@@ -11,7 +11,10 @@ export default function Biblioteca() {
     const [mostrarModal, setMostrarModal] = useState(false);
     const [juegoEnEdicion, setJuegoEnEdicion] = useState(null);
     const [error, setError] = useState(null);
-    const [mensaje, setMensaje] = useState(null); // para mostrar alertas
+    const [mensaje, setMensaje] = useState(null);
+
+    // Configuración de estanterías (juegos por fila)
+    const JUEGOS_POR_ESTANTERIA = 4;
 
     useEffect(() => {
         const cargarJuegos = async () => {
@@ -50,25 +53,25 @@ export default function Biblioteca() {
     }, []);
 
     const handleAgregarJuego = async (nuevoJuego) => {
-        // Validar duplicado por título (sin importar mayúsculas/minúsculas)
+        // Validar duplicado por título
         const tituloExiste = juegos.some(
             (j) => j.titulo.trim().toLowerCase() === nuevoJuego.titulo.trim().toLowerCase()
         );
 
         if (tituloExiste) {
-            setMensaje("⚠️ Ya existe un juego con ese título en tu biblioteca.");
+            setMensaje({ tipo: "warning", texto: "⚠️ Ya existe un juego con ese título en tu biblioteca." });
             setTimeout(() => setMensaje(null), 3000);
-            return; // 🚫 No continuar con el POST
+            return;
         }
 
         try {
             const juegoCreado = await agregarJuego(nuevoJuego);
             setJuegos([...juegos, juegoCreado]);
-            setMensaje("✅ Juego agregado correctamente.");
+            setMensaje({ tipo: "success", texto: "✅ Juego agregado correctamente." });
             setTimeout(() => setMensaje(null), 3000);
         } catch (err) {
             console.error("Error al agregar el juego:", err);
-            setMensaje("❌ Ocurrió un error al agregar el juego.");
+            setMensaje({ tipo: "error", texto: "❌ Ocurrió un error al agregar el juego." });
             setTimeout(() => setMensaje(null), 3000);
         }
     };
@@ -89,11 +92,11 @@ export default function Biblioteca() {
         try {
             await eliminarJuego(id);
             setJuegos(juegos.filter((j) => j._id !== id));
-            setMensaje("✅ Juego eliminado correctamente.");
+            setMensaje({ tipo: "success", texto: "✅ Juego eliminado correctamente." });
             setTimeout(() => setMensaje(null), 3000);
         } catch (err) {
             console.error("Error al eliminar el juego:", err);
-            setMensaje("❌ Ocurrió un error al eliminar el juego.");
+            setMensaje({ tipo: "error", texto: "❌ Ocurrió un error al eliminar el juego." });
             setTimeout(() => setMensaje(null), 3000);
         }
     };
@@ -109,46 +112,106 @@ export default function Biblioteca() {
             setJuegos(juegos.map((j) => (j._id === resultado._id ? resultado : j)));
             setJuegoEnEdicion(null);
             setMostrarModal(false);
-            setMensaje("✅ Juego actualizado correctamente.");
+            setMensaje({ tipo: "success", texto: "✅ Juego actualizado correctamente." });
             setTimeout(() => setMensaje(null), 3000);
         } catch (err) {
             console.error("Error al actualizar el juego:", err);
-            setMensaje("❌ Ocurrió un error al actualizar el juego.");
+            setMensaje({ tipo: "error", texto: "❌ Ocurrió un error al actualizar el juego." });
             setTimeout(() => setMensaje(null), 3000);
         }
     };
 
-    if (cargando) return <p>Cargando juegos...</p>;
-    if (error) return <p>{error}</p>;
+    // Dividir juegos en estanterías
+    const dividirEnEstanterias = (juegos) => {
+        const estanterias = [];
+        for (let i = 0; i < juegos.length; i += JUEGOS_POR_ESTANTERIA) {
+            estanterias.push(juegos.slice(i, i + JUEGOS_POR_ESTANTERIA));
+        }
+        return estanterias;
+    };
+
+    const estanterias = dividirEnEstanterias(juegos);
+    const juegosCompletados = juegos.filter(j => j.completado).length;
+
+    if (cargando) {
+        return (
+            <section className="biblioteca">
+                <div className="biblioteca-header">
+                    <h2>📚 Tu biblioteca</h2>
+                </div>
+                <p style={{ textAlign: 'center', color: '#888', fontSize: '1.1rem' }}>
+                    Cargando juegos...
+                </p>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className="biblioteca">
+                <div className="biblioteca-header">
+                    <h2>📚 Tu biblioteca</h2>
+                </div>
+                <div className="alerta error">{error}</div>
+            </section>
+        );
+    }
 
     return (
         <section className="biblioteca">
             <div className="biblioteca-header">
-                <h2>📚 Tu biblioteca</h2>
-                <button className="btn-agregar" onClick={() => setMostrarModal(true)}>
-                    ➕ Agregar juego
+                <h2>
+                    <span>📚</span>
+                    Tu biblioteca
+                </h2>
+                <button
+                    className="btn-agregar"
+                    onClick={() => setMostrarModal(true)}
+                    aria-label="Agregar nuevo juego"
+                >
+                    <span>➕</span>
+                    Agregar juego
                 </button>
             </div>
 
             {/* Mensaje temporal */}
-            {mensaje && <p className="alerta">{mensaje}</p>}
+            {mensaje && (
+                <div className={`alerta ${mensaje.tipo}`}>
+                    {mensaje.texto}
+                </div>
+            )}
 
-            <div className="estante">
-                {juegos.length === 0 ? (
-                    <p>No hay juegos en tu biblioteca.</p>
-                ) : (
-                    juegos.map((juego) => (
-                        <JuegoCard
-                            key={juego._id}
-                            juego={juego}
-                            onActualizar={handleActualizarJuego}
-                            onEditar={handleEditarJuego}
-                            onEliminar={handleEliminarJuego}
-                        />
-                    ))
-                )}
-            </div>
+            {/* Estanterías con juegos */}
+            {juegos.length === 0 ? (
+                <div className="biblioteca-vacia">
+                    <div className="biblioteca-vacia-icon">📚</div>
+                    <p>Tu biblioteca está vacía</p>
+                    <p>Agrega tu primer juego haciendo clic en el botón "Agregar juego"</p>
+                </div>
+            ) : (
+                <div className="estanterias-container">
+                    {estanterias.map((estanteria, index) => (
+                        <div key={index} className="estanteria">
+                            {/* Soportes de madera */}
+                            <div className="estanteria-soporte left"></div>
+                            <div className="estanteria-soporte right"></div>
 
+                            {/* Juegos en la estantería */}
+                            {estanteria.map((juego) => (
+                                <JuegoCard
+                                    key={juego._id}
+                                    juego={juego}
+                                    onActualizar={handleActualizarJuego}
+                                    onEditar={handleEditarJuego}
+                                    onEliminar={handleEliminarJuego}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Modal del formulario */}
             {mostrarModal && (
                 <FormularioJuego
                     onClose={() => {

@@ -1,62 +1,280 @@
+.biblioteca {
+    padding: 30px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header */
 .biblioteca-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 35px;
+    padding: 20px 25px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+    border-radius: 12px;
+    border: 2px solid rgba(200, 200, 200, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
+.biblioteca-header h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: 0.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Botón agregar */
 .btn-agregar {
-    background-color: #1e90ff;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
+    background: linear-gradient(135deg, #e8e8e8 0%, #cccccc 100%);
+    color: #000000;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 24px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.3s;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-agregar:hover {
-    background-color: #3aa0ff;
+    background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
 }
 
+.btn-agregar:active {
+    transform: translateY(0);
+}
+
+/* Alertas */
 .alerta {
     text-align: center;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-bottom: 15px;
-    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1rem;
     transition: opacity 0.3s;
-}
-
-.alerta:has(> span) {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.3s ease;
 }
 
-.alerta::before {
-    content: "ℹ️ ";
+.alerta.info {
+    background: linear-gradient(135deg, rgba(200, 200, 200, 0.15) 0%, rgba(200, 200, 200, 0.05) 100%);
+    color: #b0b0b0;
+    border: 2px solid rgba(200, 200, 200, 0.3);
 }
 
-.alerta {
-    background-color: #222;
-    color: #eee;
-    border-left: 4px solid #1e90ff;
+.alerta.success {
+    background: linear-gradient(135deg, rgba(0, 200, 81, 0.15) 0%, rgba(0, 200, 81, 0.05) 100%);
+    color: #00e676;
+    border: 2px solid rgba(0, 200, 81, 0.3);
 }
 
-/* Colores según mensaje */
-.alerta:has(span.warning),
-.alerta:contains("⚠️") {
-    border-left-color: #ffb400;
+.alerta.warning {
+    background: linear-gradient(135deg, rgba(255, 180, 0, 0.15) 0%, rgba(255, 180, 0, 0.05) 100%);
+    color: #ffb400;
+    border: 2px solid rgba(255, 180, 0, 0.3);
 }
 
-.alerta:has(span.success),
-.alerta:contains("✅") {
-    border-left-color: #00c851;
+.alerta.error {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.15) 0%, rgba(220, 53, 69, 0.05) 100%);
+    color: #ff6b6b;
+    border: 2px solid rgba(220, 53, 69, 0.3);
 }
 
-.alerta:has(span.error),
-.alerta:contains("❌") {
-    border-left-color: #ff4444;
+/* Contenedor de estanterías */
+.estanterias-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+/* Estantería individual */
+.estanteria {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    padding: 25px 20px 35px;
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0.5) 0%, rgba(26, 26, 26, 0.8) 100%);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Borde superior de la estantería (madera) */
+.estanteria::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(180deg, #8B4513 0%, #654321 50%, #4a2f1a 100%);
+    border-radius: 4px 4px 0 0;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(139, 69, 19, 0.8),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Borde inferior de la estantería (madera con relieve) */
+.estanteria::after {
+    content: '';
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    height: 25px;
+    background: linear-gradient(180deg, #8B4513 0%, #654321 40%, #4a2f1a 100%);
+    border-radius: 0 0 6px 6px;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.6),
+        inset 0 2px 0 rgba(139, 69, 19, 0.6),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Textura de madera */
+.estanteria-madera {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    height: 25px;
+    background-image:
+        repeating-linear-gradient(90deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 2px,
+            rgba(0, 0, 0, 0.1) 4px);
+    pointer-events: none;
+    border-radius: 0 0 6px 6px;
+}
+
+/* Soportes de la estantería */
+.estanteria-soporte {
+    position: absolute;
+    bottom: -25px;
+    width: 8px;
+    height: 30px;
+    background: linear-gradient(180deg, #654321 0%, #4a2f1a 100%);
+    box-shadow:
+        2px 0 4px rgba(0, 0, 0, 0.5),
+        inset 1px 0 0 rgba(139, 69, 19, 0.3);
+}
+
+.estanteria-soporte.left {
+    left: 30px;
+}
+
+.estanteria-soporte.right {
+    right: 30px;
+}
+
+/* Mensaje de biblioteca vacía */
+.biblioteca-vacia {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+}
+
+.biblioteca-vacia-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.biblioteca-vacia p {
+    font-size: 1.3rem;
+    margin: 10px 0;
+    color: #aaa;
+}
+
+.biblioteca-vacia p:last-child {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 15px;
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+    .estanteria {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .biblioteca {
+        padding: 20px 15px;
+    }
+
+    .biblioteca-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .biblioteca-header h2 {
+        font-size: 1.6rem;
+        justify-content: center;
+    }
+
+    .btn-agregar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .estanteria {
+        padding: 20px 15px 30px;
+        gap: 15px;
+    }
+
+    .estanteria-soporte.left {
+        left: 15px;
+    }
+
+    .estanteria-soporte.right {
+        right: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .biblioteca-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .btn-agregar {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+
+    .alerta {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+
+    .biblioteca-vacia-icon {
+        font-size: 4rem;
+    }
+
+    .biblioteca-vacia p {
+        font-size: 1.1rem;
+    }
 }

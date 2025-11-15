@@ -2,13 +2,10 @@ import { useState } from "react";
 import "./JuegoCard.css";
 
 // Imagen por defecto si la portada no carga
-const IMAGEN_DEFECTO = "https://via.placeholder.com/220x130?text=Sin+portada";
+const IMAGEN_DEFECTO = "https://www.format.com/wp-content/uploads/empty-game-11.jpg";
 
 export default function JuegoCard({ juego, onEditar, onEliminar }) {
     const [mostrarModal, setMostrarModal] = useState(false);
-    const [setEditando] = useState(false);
-    const [setTextoTemporal] = useState("");
-    const [setCargandoResena] = useState(false);
     const [imagenError, setImagenError] = useState(false);
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
@@ -25,22 +22,19 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
     };
 
     // Abrir/cerrar modal
-    const abrirModal = async () => {
+    const abrirModal = () => {
         setMostrarModal(true);
-        setCargandoResena(true);
     };
 
     const cerrarModal = () => {
         setMostrarModal(false);
-        setEditando(false);
-        setTextoTemporal("");
     };
 
     const handleEliminar = () => {
         setMostrarConfirmacion(true);
     };
 
-    const confirmareEliminar = () => {
+    const confirmarEliminar = () => {
         onEliminar(juego._id);
         setMostrarConfirmacion(false);
         cerrarModal();
@@ -56,8 +50,6 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
             cerrarModal();
         }
     };
-
-
 
     return (
         <>
@@ -81,7 +73,7 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
                             <h2>{juego.titulo}</h2>
-                            <button onClick={cerrarModal}>✖</button>
+                            <button onClick={cerrarModal} aria-label="Cerrar modal">✖</button>
                         </div>
                         <div className="modal-body">
                             <img
@@ -91,17 +83,43 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
                                 onError={manejarErrorImagen}
                             />
                             <div className="modal-details">
-                                <p><strong>Género:</strong> {juego.genero}</p>
-                                <p><strong>Plataforma:</strong> {juego.plataforma}</p>
-                                <p><strong>Año de lanzamiento:</strong> {juego.anoLanzamiento}</p>
-                                <p><strong>Desarrollador:</strong> {juego.desarrollador}</p>
-                                <p><strong>Descripción:</strong> {juego.descripcion}</p>
-                                <p><strong>Completado:</strong> {juego.completado ? "✅" : "❌"}</p>
+                                <p>
+                                    <strong>🎮 Género:</strong>
+                                    {juego.genero}
+                                </p>
+                                <p>
+                                    <strong>🕹️ Plataforma:</strong>
+                                    {juego.plataforma}
+                                </p>
+                                <p>
+                                    <strong>📅 Año de lanzamiento:</strong>
+                                    {juego.anoLanzamiento}
+                                </p>
+                                <p>
+                                    <strong>👨‍💻 Desarrollador:</strong>
+                                    {juego.desarrollador}
+                                </p>
+                                <p>
+                                    <strong>📝 Descripción:</strong>
+                                    {juego.descripcion}
+                                </p>
+                                <p>
+                                    <strong>✅ Estado:</strong>
+                                    {juego.completado ? (
+                                        <span style={{ color: '#00c851' }}>✓ Completado</span>
+                                    ) : (
+                                        <span style={{ color: '#ff8800' }}>⏳ En progreso</span>
+                                    )}
+                                </p>
                             </div>
                         </div>
                         <div className="modal-acciones">
-                            <button className="btn-editar" onClick={handleEditar}>Editar</button>
-                            <button className="btn-eliminar" onClick={handleEliminar}>Eliminar</button>
+                            <button className="btn-editar" onClick={handleEditar}>
+                                Editar
+                            </button>
+                            <button className="btn-eliminar" onClick={handleEliminar}>
+                                Eliminar
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -112,15 +130,27 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
                 <div className="modal-confirmacion-overlay" onClick={cancelarEliminar}>
                     <div className="modal-confirmacion" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-confirmacion-header">
-                            <h3>⚠️ Confirmar eliminación</h3>
+                            <h3>
+                                <span>⚠️</span>
+                                Confirmar eliminación
+                            </h3>
                         </div>
                         <div className="modal-confirmacion-body">
-                            <p>¿Estás seguro de que deseas eliminar <strong>"{juego.titulo}"</strong>?</p>
-                            <p className="advertencia">Esta acción no se puede deshacer.</p>
+                            <p>
+                                ¿Estás seguro de que deseas eliminar{" "}
+                                <strong>"{juego.titulo}"</strong>?
+                            </p>
+                            <p className="advertencia">
+                                ⚡ Esta acción no se puede deshacer y se perderá toda la información relacionada.
+                            </p>
                         </div>
                         <div className="modal-confirmacion-acciones">
-                            <button className="btn-cancelar" onClick={cancelarEliminar}>Cancelar</button>
-                            <button className="btn-confirmar" onClick={confirmareEliminar}>Eliminar</button>
+                            <button className="btn-cancelar" onClick={cancelarEliminar}>
+                                Cancelar
+                            </button>
+                            <button className="btn-confirmar" onClick={confirmarEliminar}>
+                                Eliminar
+                            </button>
                         </div>
                     </div>
                 </div>
