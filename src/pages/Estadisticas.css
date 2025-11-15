@@ -22,7 +22,7 @@
 /* Tarjetas de estadísticas */
 .stat-card {
     background: linear-gradient(135deg, #1f1f1f 0%, #292929 100%);
-    border: 2px solid #1e90ff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     padding: 25px;
     display: flex;
@@ -34,8 +34,8 @@
 
 .stat-card:hover {
     transform: translateY(-5px);
-    border-color: #3aa0ff;
-    box-shadow: 0 8px 20px rgba(30, 144, 255, 0.2);
+    border-color: #7e7e7e;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .stat-icon {
@@ -49,7 +49,7 @@
 }
 
 .stat-content h3 {
-    color: #aaa;
+    color: #ffffff;
     font-size: 0.95rem;
     font-weight: 600;
     margin: 0 0 8px 0;
@@ -58,7 +58,7 @@
 }
 
 .stat-value {
-    color: #1e90ff;
+    color: #808080;
     font-size: 2rem;
     font-weight: bold;
     margin: 0;
