@@ -11,6 +11,8 @@ export default function Resenas() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [mensaje, setMensaje] = useState(null);
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+  const [resenaAEliminar, setResenaAEliminar] = useState(null);
 
   useEffect(() => {
     cargarDatos();
@@ -83,19 +85,32 @@ export default function Resenas() {
     }
   };
 
-  const borrarResena = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta reseña?")) {
-      try {
-        await eliminarResena(id);
-        setResenas(resenas.filter(r => r._id !== id));
-        setMensaje({ tipo: "success", texto: "✅ Reseña eliminada correctamente." });
-        setTimeout(() => setMensaje(null), 3000);
-      } catch (err) {
-        console.error("Error al eliminar reseña:", err);
-        setMensaje({ tipo: "error", texto: "❌ Error al eliminar la reseña." });
-        setTimeout(() => setMensaje(null), 3000);
-      }
+  const solicitarEliminarResena = (resena) => {
+    setResenaAEliminar(resena);
+    setMostrarConfirmacion(true);
+  };
+
+  const confirmarEliminarResena = async () => {
+    if (!resenaAEliminar) return;
+
+    try {
+      await eliminarResena(resenaAEliminar._id);
+      setResenas(resenas.filter(r => r._id !== resenaAEliminar._id));
+      setMensaje({ tipo: "success", texto: "✅ Reseña eliminada correctamente." });
+      setTimeout(() => setMensaje(null), 3000);
+    } catch (err) {
+      console.error("Error al eliminar reseña:", err);
+      setMensaje({ tipo: "error", texto: "❌ Error al eliminar la reseña." });
+      setTimeout(() => setMensaje(null), 3000);
+    } finally {
+      setMostrarConfirmacion(false);
+      setResenaAEliminar(null);
     }
+  };
+
+  const cancelarEliminar = () => {
+    setMostrarConfirmacion(false);
+    setResenaAEliminar(null);
   };
 
   const obtenerTituloJuego = (juegoId) => {
@@ -197,12 +212,43 @@ export default function Resenas() {
                 {editandoId === r._id ? null : (
                   <>
                     <button className="btn-editar" onClick={() => iniciarEdicion(r)}>Editar</button>
-                    <button className="btn-eliminar" onClick={() => borrarResena(r._id)}>Eliminar</button>
+                    <button className="btn-eliminar" onClick={() => solicitarEliminarResena(r)}>Eliminar</button>
                   </>
                 )}
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Modal de confirmación de eliminación */}
+      {mostrarConfirmacion && resenaAEliminar && (
+        <div className="modal-confirmacion-overlay" onClick={cancelarEliminar}>
+          <div className="modal-confirmacion" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-confirmacion-header">
+              <h3>
+                <span>⚠️</span>
+                Confirmar eliminación
+              </h3>
+            </div>
+            <div className="modal-confirmacion-body">
+              <p>
+                ¿Estás seguro de que deseas eliminar la reseña de{" "}
+                <strong>"{obtenerTituloJuego(resenaAEliminar.juegoId)}"</strong>?
+              </p>
+              <p className="advertencia">
+                ⚡ Esta acción no se puede deshacer y se perderá toda la información de esta reseña.
+              </p>
+            </div>
+            <div className="modal-confirmacion-acciones">
+              <button className="btn-cancelar" onClick={cancelarEliminar}>
+                Cancelar
+              </button>
+              <button className="btn-confirmar" onClick={confirmarEliminarResena}>
+                Eliminar
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </section>

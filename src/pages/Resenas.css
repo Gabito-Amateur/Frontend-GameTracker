@@ -210,6 +210,153 @@
   transform: translateY(-2px);
 }
 
+/* Modal de confirmación de eliminación */
+.modal-confirmacion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-confirmacion {
+  background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+  color: #eee;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 2px solid rgba(220, 53, 69, 0.5);
+}
+
+.modal-confirmacion-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(220, 53, 69, 0.3);
+}
+
+.modal-confirmacion-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-confirmacion-body {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.modal-confirmacion-body p {
+  margin: 12px 0;
+  font-size: 1.05rem;
+  color: #ddd;
+  line-height: 1.6;
+}
+
+.modal-confirmacion-body p strong {
+  color: #fff;
+  word-break: break-word;
+  font-weight: 600;
+}
+
+.modal-confirmacion-body .advertencia {
+  font-size: 0.95rem;
+  color: #ff6b6b;
+  font-style: italic;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(220, 53, 69, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #dc3545;
+}
+
+.modal-confirmacion-acciones {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-cancelar,
+.btn-confirmar {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 130px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-cancelar {
+  background: #333;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-cancelar:hover {
+  background: #444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(85, 85, 85, 0.4);
+}
+
+.btn-confirmar {
+  background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+}
+
+.btn-confirmar:hover {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.6);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* Mensaje cuando no hay reseñas */
 .resenas-page>p {
   text-align: center;
@@ -250,5 +397,18 @@
   .btn-agregar-resena {
     font-size: 0.9rem;
     padding: 10px 20px;
+  }
+
+  .modal-confirmacion {
+    padding: 25px 20px;
+  }
+
+  .modal-confirmacion-acciones {
+    flex-direction: column;
+  }
+
+  .btn-cancelar,
+  .btn-confirmar {
+    width: 100%;
   }
 }
