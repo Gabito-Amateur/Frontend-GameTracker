@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import JuegoCard from "../components/JuegoCard/JuegoCard";
 import FormularioJuego from "../components/FormularioJuego/FormularioJuego";
 import { obtenerJuegos, agregarJuego, eliminarJuego, actualizarJuego } from "../api/JuegosApi";
-import { obtenerResenaPorJuego } from "../api/ResenasApi";
+import { obtenerResenaPorJuego, eliminarResena } from "../api/ResenasApi";
 import "./Biblioteca.css";
 
 export default function Biblioteca() {
@@ -90,10 +90,42 @@ export default function Biblioteca() {
 
     const handleEliminarJuego = async (id) => {
         try {
+            // Buscar si el juego tiene reseñas asociadas
+            const juego = juegos.find(j => j._id === id);
+            let resenasEliminadas = 0;
+
+            if (juego && juego.resenaId) {
+                try {
+                    // Eliminar la reseña asociada
+                    await eliminarResena(juego.resenaId);
+                    resenasEliminadas = 1;
+                    console.log(`Reseña ${juego.resenaId} eliminada automáticamente`);
+                } catch (errResena) {
+                    console.error("Error al eliminar reseña asociada:", errResena);
+                    // Continuar con la eliminación del juego aunque falle la reseña
+                }
+            }
+
+            // Eliminar el juego
             await eliminarJuego(id);
+            
+            // Actualizar la lista
             setJuegos(juegos.filter((j) => j._id !== id));
-            setMensaje({ tipo: "success", texto: "✅ Juego eliminado correctamente." });
-            setTimeout(() => setMensaje(null), 3000);
+            
+            // Mostrar mensaje apropiado
+            if (resenasEliminadas > 0) {
+                setMensaje({ 
+                    tipo: "success", 
+                    texto: `✅ Juego y su reseña asociada eliminados correctamente.` 
+                });
+            } else {
+                setMensaje({ 
+                    tipo: "success", 
+                    texto: "✅ Juego eliminado correctamente." 
+                });
+            }
+            
+            setTimeout(() => setMensaje(null), 4000);
         } catch (err) {
             console.error("Error al eliminar el juego:", err);
             setMensaje({ tipo: "error", texto: "❌ Ocurrió un error al eliminar el juego." });
@@ -131,7 +163,6 @@ export default function Biblioteca() {
     };
 
     const estanterias = dividirEnEstanterias(juegos);
-    const juegosCompletados = juegos.filter(j => j.completado).length;
 
     if (cargando) {
         return (

@@ -51,6 +51,9 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
         }
     };
 
+    // Verificar si el juego tiene reseña
+    const tieneResena = juego.resenaId || juego.resena;
+
     return (
         <>
             {/* Tarjeta principal */}
@@ -111,6 +114,12 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
                                         <span style={{ color: '#ff8800' }}>⏳ En progreso</span>
                                     )}
                                 </p>
+                                {tieneResena && (
+                                    <p>
+                                        <strong>📝 Reseña:</strong>
+                                        <span style={{ color: '#00e676' }}>✓ Tiene reseña</span>
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className="modal-acciones">
@@ -140,6 +149,11 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
                                 ¿Estás seguro de que deseas eliminar{" "}
                                 <strong>"{juego.titulo}"</strong>?
                             </p>
+                            {tieneResena && (
+                                <p className="advertencia">
+                                    📝 Este juego tiene una reseña asociada que también será eliminada.
+                                </p>
+                            )}
                             <p className="advertencia">
                                 ⚡ Esta acción no se puede deshacer y se perderá toda la información relacionada.
                             </p>
@@ -149,7 +163,7 @@ export default function JuegoCard({ juego, onEditar, onEliminar }) {
                                 Cancelar
                             </button>
                             <button className="btn-confirmar" onClick={confirmarEliminar}>
-                                Eliminar
+                                Eliminar {tieneResena ? "todo" : ""}
                             </button>
                         </div>
                     </div>
